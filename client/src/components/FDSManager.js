@@ -166,9 +166,7 @@ class FDSManager extends Component {
         if (res.length === 0) {
           // TODO set empty list
           this.setState({ ridersStats: this.state.ridersName });
-          console.log("res length = 0 ", res);
         } else {
-          console.log("printing from riderstats query in component ", res);
           this.setState({
             ridersStats: res,
           });
@@ -255,12 +253,6 @@ class FDSManager extends Component {
     for (i = 1; i <= daysInMonth; i++) {
       returnDay.push(i);
     }
-    console.log(
-      "from generate days: %d month %d year %d",
-      daysInMonth,
-      month,
-      year
-    );
     return returnDay;
   };
 
@@ -279,7 +271,6 @@ class FDSManager extends Component {
         </option>
       );
     }
-    console.log("renderDayDropdown ran");
     return items;
   };
 
@@ -372,14 +363,12 @@ class FDSManager extends Component {
   };
 
   onDayDropdownSelected = (e) => {
-    console.log("The value selected", e.target.value);
     this.setState({
       queryDate: e.target.value,
     });
   };
 
   onAreaDropdownSelected = (e) => {
-    console.log("The value selected", e.target.value);
     this.setState({
       area: e.target.value,
     });
@@ -414,7 +403,6 @@ class FDSManager extends Component {
             temp.push({ hour: j, num_orders: 0 });
           }
         }
-        console.log("what is temp: ", temp);
         this.setState({
           dailyLocationStats: temp,
         });
@@ -445,7 +433,6 @@ class FDSManager extends Component {
   getName = () => {
     // TODO implement get fdsmanager name here if got time
     let account_id = { accountid: this.props.location.state.account_id };
-    console.log("getName ran");
     return fetch("http://localhost:3001/FDSManager/getName", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -455,7 +442,6 @@ class FDSManager extends Component {
         return res.json();
       })
       .then((res) => {
-        console.log("aaaaaaaaa.: ", res[0].fds_id);
         this.setState({
           name: res[0].name,
           id: res[0].fds_id,
@@ -696,9 +682,6 @@ class FDSManager extends Component {
     this.setState(
       {
         promoStartTime: e.target.value,
-      },
-      () => {
-        console.log("startTime: ", this.state.promoStartTime);
       }
     );
   };
@@ -711,12 +694,9 @@ class FDSManager extends Component {
 
   checkValidTriggerValue = (type, triggerValue, discountValue) => {
     if (type === "Flat Rate" && Number(triggerValue) < Number(discountValue)) {
-      console.log("in flatrate");
       return false;
     }
     if (type !== 'Delivery' && (Number(triggerValue) < 0 || isNaN(triggerValue))) {
-      console.log("triggerv: ", Number(triggerValue));
-      console.log("in lesser than 0 or nan triggerval");
       return false;
     }
     return true;
@@ -724,7 +704,6 @@ class FDSManager extends Component {
 
   checkValidDiscountValue = (type, discountValue) => {
     if (type !== 'Delivery' && (isNaN(discountValue) || Number(discountValue) <= 0)) {
-      console.log("not valid discount va");
       return false;
     }
     return true;
@@ -746,7 +725,6 @@ class FDSManager extends Component {
     }
     if (category === "First Order") {
       isLimitPresent = this.state.promoLimit;
-      console.log("limit: %s", isLimitPresent);
     }
     return (
       isStandardFieldsPresence &&
@@ -788,12 +766,6 @@ class FDSManager extends Component {
       swal("Error adding promo", "Some fields are missing", "error");
       return false;
     } else if (!isValidTriggerValueAndDiscountValue) {
-      console.log(
-        "trigger: %s\ndiscount %s\nvalid trigger and disc: %s",
-        isValidTriggerVal,
-        isValidDiscountVal,
-        isValidTriggerValueAndDiscountValue
-      );
       swal(
         "Error adding promo",
         "Make sure Discount value and minimum value to apply discount is positive number and nett profit must not be negative",
@@ -843,12 +815,6 @@ class FDSManager extends Component {
 
   queryAddPromo = () => {
     return this.getPromoStartAndEndTime().then(([start_time, end_time]) => {
-      console.log(
-        "promostart : %s\npromoend : %s\npromoLimit: %s ",
-        start_time,
-        end_time,
-        this.state.promoLimit
-      );
       fetch("http://localhost:3001/FDSManager/addPromo", {
         method: "post",
         headers: { "Content-Type": "application/json" },
@@ -867,8 +833,6 @@ class FDSManager extends Component {
         .then((res) => {
           // TODO check error message display alert for error message
           swal("Promotion added", "Click ok to continue", "success");
-          console.log("from insert promo");
-          console.log(res);
         })
         .then((res) => {
           this.getAllActivePromotion();
@@ -925,7 +889,6 @@ class FDSManager extends Component {
   };
 
   getAllActivePromotion = () => {
-    console.log("before passing", this.state.id);
     fetch("http://localhost:3001/FDSManager/getActivePromo", {
       method: "post",
       headers: { "Content-Type": "application/json" },
@@ -937,7 +900,6 @@ class FDSManager extends Component {
         return res.json();
       })
       .then((res) => {
-        console.log("id from getAllActivePromotion: ", this.state.id);
         this.setState(
           {
             activePromo: res,
@@ -951,7 +913,6 @@ class FDSManager extends Component {
 
   componentDidMount() {
     this.getName().then((res) => {
-      console.log(".then: ", res);
       this.getAllActivePromotion();
     });
     this.getAllRidersName();

@@ -40,7 +40,6 @@ CREATE TABLE Accounts (
 );
 
 -- Customers relation here--
-
 CREATE TABLE Customers (
 	cid varchar(255) references Accounts(account_id) on delete cascade on update cascade,
 	name varchar(255) not null,
@@ -333,7 +332,6 @@ ON Orders
 FOR EACH ROW 
 EXECUTE FUNCTION reject_order_below_threshold();
 
--- Need a trigger to check if it exceed the limit for individual food when update and insert into Consists.
 CREATE OR REPLACE FUNCTION reject_above_food_limit()
 	RETURNS trigger AS $$
 DECLARE
@@ -354,7 +352,6 @@ ON Consists
 FOR EACH ROW 
 EXECUTE FUNCTION reject_above_food_limit();
 
--- Need a trigger to decrease the food quantity after one person paid for the order
 CREATE OR REPLACE FUNCTION update_food_quantity()
 	RETURNS trigger AS $$
 DECLARE 
@@ -385,7 +382,6 @@ ON Orders
 FOR EACH ROW 
 EXECUTE FUNCTION update_food_quantity();
 
--- Need a trigger to check if the food quantity is negative value when update or insert
 CREATE OR REPLACE FUNCTION reject_negative_food_quantity()
 	RETURNS trigger AS $$
 BEGIN
@@ -403,7 +399,6 @@ ON Foods
 FOR EACH ROW 
 EXECUTE FUNCTION reject_negative_food_quantity();
 
--- Need a trigger to check set food availability to false when food quantity become zero during update or insert
 CREATE OR REPLACE FUNCTION zero_quantity_set_food_unavailable()
 	RETURNS trigger AS $$
 BEGIN
@@ -423,7 +418,6 @@ ON Foods
 FOR EACH ROW 
 EXECUTE FUNCTION zero_quantity_set_food_unavailable();
 
--- Need a trigger to prevent the user to insert duplicate record for start_time and end_time in shiftinfo
 CREATE OR REPLACE FUNCTION reject_same_duration()
 	RETURNS trigger AS $$
 BEGIN
@@ -441,22 +435,6 @@ ON ShiftInfo
 FOR EACH ROW 
 EXECUTE FUNCTION reject_same_duration();
 
--- need a trigger to check whehter weekly schedule added is within the start_wk and end_wk else reject
-
--- need a trigger to check weekly schdedule total hours fit within the range of working hours for ptriders
-
--- need a trigger to check for FTRiders 5 shift is in 1 WWS.
-
--- need a trigger to check for FTRiders, 4 WWS is equivalent.
-
--- need a trigger to ensure everytime a MWS is added, Has table is added with the MWS instance to capture  total participation constraint
- 
--- need a trigger to ensure everytime a WWS is added, Contains table is added with the WWS isntance to capture the total participation constraint
-
--- Need one more trigger for check whether payment method, date and time for order placed and total_price when order status change to paid
--- Add one more trigger to add the entry in table Consists when order_Status in orders changed to paid
-
--- Need a trigger to update new customers to see if they are available for current promotion 
 -- Check promo category: All, First Order, Restaurant
 -- Check if the promo is within time limit
 CREATE OR REPLACE FUNCTION add_customer_promotion() RETURNS TRIGGER
@@ -484,7 +462,6 @@ CREATE TRIGGER add_customer_promotion_trigger
     FOR EACH ROW
     EXECUTE FUNCTION add_customer_promotion();
 
--- need a trigger to update given table
 CREATE OR REPLACE FUNCTION add_promo() RETURNS TRIGGER
 	AS $$
 DECLARE
@@ -748,7 +725,6 @@ INSERT INTO Has(mid, wid, working_week) values
 -- PTWorks
 INSERT into PTWorks (rid, working_week, total_hours, wid) VALUES ('e6115a43-b3b7-4b45-9014-5f2ac0f913e2', 1, 40, 5),
 	('e6115a43-b3b7-4b45-9014-5f2ac0f913e2', 2, 40, 6);
--- INSERT into PTWorks (rid, wk_no, start_date, end_date, total_hours) VALUES ('e6115a43-b3b7-4b45-9014-5f2ac0f913e2', 19, '2020-05-09', '2020-05-15', 40);
 
 -- FTWorks, total_hours
 insert into FTWorks (rid, working_month, total_hours, mid) values 

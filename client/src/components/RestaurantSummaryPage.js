@@ -62,7 +62,7 @@ class RestaurantSummaryPage extends Component {
                 <br />
                 Details: {this.state.selectedPromo.details}
                 <br />
-                Discount: {this.state.selectedPromo.promo_type === "flat-rate" ? "$" : ""}{this.state.selectedPromo.discount_value}{this.state.selectedPromo.promo_type === "percent" ? "%" : ""}
+                Discount: {this.state.selectedPromo.promo_type === "Flat Rate" ? "$" : ""}{this.state.selectedPromo.discount_value}{this.state.selectedPromo.promo_type === "Percent" ? "%" : ""}
                 <br />
                 Minimum Spending: {this.state.selectedPromo.trigger_value}
                 <h1 />
